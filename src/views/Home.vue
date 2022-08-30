@@ -7,59 +7,28 @@
         <v-list class="pa-0">
           <v-list-tile>
             <v-list-tile-action>
-              <v-checkbox
-                :input-value="allChecked"
-                @change="toggleAll(!allChecked)"
-                color="primary"
-                v-if="todos.length > 0"
-              ></v-checkbox>
-              <v-icon
-                color="primary"
-                v-else
-              >check</v-icon>
+              <v-checkbox :input-value="allChecked" @change="toggleAll(!allChecked)" color="primary"
+                v-if="todos.length > 0"></v-checkbox>
+              <v-icon color="primary" v-else>check</v-icon>
             </v-list-tile-action>
-            <v-text-field
-              :label="'New todo input'"
-              @keydown.enter="addTodo"
-              autofocus
-              browser-autocomplete="off"
-              clearable
-              color="primary"
-              flat
-              hide-details
-              maxlength="1023"
-              placeholder="What needs to be done?"
-              solo
-              v-model="newTodo"
-            ></v-text-field>
+            <v-text-field :label="'New todo input'" @keydown.enter="addTodo" autofocus browser-autocomplete="off"
+              clearable color="primary" flat hide-details maxlength="1023" placeholder="What needs to be done?" solo
+              v-model="newTodo"></v-text-field>
           </v-list-tile>
         </v-list>
       </v-card>
       <!-- main -->
       <v-card class="mt-3" v-show="todos.length">
-        <v-progress-linear class="my-0" v-model="progressPercentage"/>
+        <v-progress-linear class="my-0" v-model="progressPercentage" />
         <v-card-actions class="px-3" v-show="todos.length">
           <span class="primary--text">
-            {{ remaining }} {{ remaining | pluralize('item') }} left
+            {{  remaining  }} {{  remaining | pluralize('item')  }} left
           </span>
           <v-spacer></v-spacer>
-          <v-btn-toggle
-            class="elevation-0"
-            mandatory
-            v-model="visibility"
-            v-show="todos.length"
-          >
-            <v-btn
-              :key="key"
-              :to="key"
-              :value="key"
-              class="mx-0"
-              color="primary"
-              flat
-              small
-              v-for="(val, key) in filters"
-            >
-              {{ key | capitalize }}
+          <v-btn-toggle class="elevation-0" mandatory v-model="visibility" v-show="todos.length">
+            <v-btn :key="key" :to="key" :value="key" class="mx-0" color="primary" flat small
+              v-for="(val, key) in filters">
+              {{  key | capitalize  }}
             </v-btn>
           </v-btn-toggle>
         </v-card-actions>
@@ -68,63 +37,32 @@
             <v-divider :key="`${todo.uid}-divider`"></v-divider>
             <v-list-tile :key="todo.uid" class="todo-item" :class="{ 'editing': editing }">
               <v-list-tile-action>
-                <v-checkbox
-                  :input-value="todo.done"
-                  @change="toggleTodo(todo)"
-                  color="primary"
-                  v-if="!!!editing"
-                ></v-checkbox>
-                <v-icon
-                  color="primary"
-                  v-else
-                >edit</v-icon>
+                <v-checkbox :input-value="todo.done" @change="toggleTodo(todo)" color="primary" v-if="!!!editing">
+                </v-checkbox>
+                <v-icon color="primary"  v-else>edit</v-icon>
               </v-list-tile-action>
+
               <template v-if="!!!editing">
-                <v-list-tile-content
-                  :class="{ 'primary--text': todo.done }"
-                  @dblclick="editing = true"
-                >
-                  {{ todo.text }}
+                <v-list-tile-content :class="{ 'primary--text': todo.done }" @dblclick="editing = true">
+                  {{  todo.text  }} 
                 </v-list-tile-content>
                 <v-list-tile-action>
-                  <v-btn
-                    @click="removeTodo(todo)"
-                    color="red lighten-3"
-                    flat
-                    icon
-                  >
+                  <v-btn @click="removeTodo(todo)" color="red lighten-3" flat icon>
                     <v-icon>close</v-icon>
                   </v-btn>
                 </v-list-tile-action>
               </template>
-              <v-text-field
-                :value="todo.text"
-                @blur="doneEdit"
-                @keyup.enter="doneEdit"
-                @keyup.esc="cancelEdit"
-                clearable
-                color="primary"
-                flat
-                hide-details
-                maxlength="1023"
-                ref="input"
-                solo
-                v-else
-                v-focus="editing"
-              ></v-text-field>
+
+              <v-text-field :value="todo.text" @blur="doneEdit($event, todo)" @keyup.enter="doneEdit($event, todo)" @keyup.esc="cancelEdit"
+                clearable color="primary" flat hide-details maxlength="1023" ref="input" solo v-else>
+              </v-text-field>
+              
             </v-list-tile>
           </template>
         </v-list>
       </v-card>
-      <v-btn
-        @click="clearCompleted"
-        block
-        class="mt-3"
-        color="primary"
-        depressed
-        round
-        v-show="todos.length > remaining"
-      >
+      <v-btn @click="clearCompleted" block class="mt-3" color="primary" depressed round
+        v-show="todos.length > remaining">
         Clear completed
       </v-btn>
       <!-- footer -->
@@ -155,8 +93,7 @@ var filters = {
   }
 }
 
-function filterFunction (n, w) {
-  console.log('holaaa')
+function filterFunction(n, w) {
   if (n === 1) {
     return w
   } else {
@@ -166,7 +103,7 @@ function filterFunction (n, w) {
 
 export default {
   props: ['filter'],
-  data () {
+  data() {
     return {
       newTodo: '',
       filters: filters,
@@ -175,7 +112,7 @@ export default {
     }
   },
   directives: {
-    focus (el, value, context) {
+    focus(el, value, context) {
       if (value.value) {
         context.context.$nextTick(function () {
           return context.context.$refs.input.focus()
@@ -184,19 +121,19 @@ export default {
     }
   },
   computed: {
-    todos () {
+    todos() {
       return this.$store.state.todos
     },
-    allChecked () {
+    allChecked() {
       return this.todos.every(todo => todo.done)
     },
-    filteredTodos () {
+    filteredTodos() {
       return filters[this.visibility](this.todos)
     },
-    remaining () {
+    remaining() {
       return this.todos.filter(todo => !todo.done).length
     },
-    progressPercentage () {
+    progressPercentage() {
       var len = this.todos.length
       return ((len - this.remaining) * 100) / len
     }
@@ -209,17 +146,18 @@ export default {
       'removeTodo',
       'toggleTodo'
     ]),
-    addTodo () {
+    addTodo() {
       var text = this.newTodo.trim()
       if (text) {
         this.$store.dispatch('addTodo', text)
       }
       this.newTodo = ''
     },
-    doneEdit (e) {
-      console.log('Ejecutando doneEdit');
-      var value = e.target.value.trim()
-      var todo = this.todo
+    doneEdit(e, todo) {
+      console.log("valor input modificado:", e.target.value)
+      var value = e.target.value.trim()      
+      //var todo = this.todo
+      console.log("todo: ", todo)
       if (!!!value) {
         this.removeTodo(todo)
       } else if (this.editing) {
@@ -230,13 +168,12 @@ export default {
         this.editing = false
       }
     },
-    cancelEdit () {
+    cancelEdit() {
       this.editing = false
     }
   },
   filters: {
     pluralize: function (n, w) {
-      console.log('TODO')
       return filterFunction(n, w)
     },
     capitalize: function (s) {
