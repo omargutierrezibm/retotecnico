@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import Home from './views/Home-component.vue'
 
 Vue.use(Router)
 
@@ -26,7 +26,6 @@ function beforeEachRouter (to, from, next) {
   } else {
     return next('/all')
   }
-  return next('/all')
 }
 router.beforeEach(function (to, from, next) { return beforeEachRouter(to, from, next) })
 

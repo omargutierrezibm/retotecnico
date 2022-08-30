@@ -44,7 +44,7 @@
 
               <template v-if="!!!editing">
                 <v-list-tile-content :class="{ 'primary--text': todo.done }" @dblclick="editing = true">
-                  {{  todo.text  }} 
+                  {{  todo.text  }}
                 </v-list-tile-content>
                 <v-list-tile-action>
                   <v-btn @click="removeTodo(todo)" color="red lighten-3" flat icon>
@@ -56,7 +56,7 @@
               <v-text-field :value="todo.text" @blur="doneEdit($event, todo)" @keyup.enter="doneEdit($event, todo)" @keyup.esc="cancelEdit"
                 clearable color="primary" flat hide-details maxlength="1023" ref="input" solo v-else>
               </v-text-field>
-              
+
             </v-list-tile>
           </template>
         </v-list>
@@ -76,14 +76,14 @@
 <script>
 import vuex from 'vuex'
 
-var filters = {
+const filters = {
   all: function (todos) {
     return todos
   },
   active: function (todos) {
     return todos.filter(function (todo) {
       console.log('INGRESÓ A ACTIVE')
-      return !!!todo.done
+      return !todo.done
     })
   },
   completed: function (todos) {
@@ -93,7 +93,7 @@ var filters = {
   }
 }
 
-function filterFunction(n, w) {
+function filterFunction (n, w) {
   if (n === 1) {
     return w
   } else {
@@ -103,16 +103,16 @@ function filterFunction(n, w) {
 
 export default {
   props: ['filter'],
-  data() {
+  data () {
     return {
       newTodo: '',
       filters: filters,
       visibility: this.filter,
-      editing: false,
+      editing: false
     }
   },
   directives: {
-    focus(el, value, context) {
+    focus (el, value, context) {
       if (value.value) {
         context.context.$nextTick(function () {
           return context.context.$refs.input.focus()
@@ -121,20 +121,20 @@ export default {
     }
   },
   computed: {
-    todos() {
+    todos () {
       return this.$store.state.todos
     },
-    allChecked() {
+    allChecked () {
       return this.todos.every(todo => todo.done)
     },
-    filteredTodos() {
+    filteredTodos () {
       return filters[this.visibility](this.todos)
     },
-    remaining() {
+    remaining () {
       return this.todos.filter(todo => !todo.done).length
     },
-    progressPercentage() {
-      var len = this.todos.length
+    progressPercentage () {
+      const len = this.todos.length
       return ((len - this.remaining) * 100) / len
     }
   },
@@ -146,19 +146,19 @@ export default {
       'removeTodo',
       'toggleTodo'
     ]),
-    addTodo() {
-      var text = this.newTodo.trim()
+    addTodo () {
+      const text = this.newTodo.trim()
       if (text) {
         this.$store.dispatch('addTodo', text)
       }
       this.newTodo = ''
     },
-    doneEdit(e, todo) {
-      console.log("valor input modificado:", e.target.value)
-      var value = e.target.value.trim()      
-      //var todo = this.todo
-      console.log("todo: ", todo)
-      if (!!!value) {
+    doneEdit (e, todo) {
+      console.log('valor input modificado:', e.target.value)
+      const value = e.target.value.trim()
+      // var todo = this.todo
+      console.log('todo: ', todo)
+      if (!value) {
         this.removeTodo(todo)
       } else if (this.editing) {
         this.editTodo({
@@ -168,7 +168,7 @@ export default {
         this.editing = false
       }
     },
-    cancelEdit() {
+    cancelEdit () {
       this.editing = false
     }
   },

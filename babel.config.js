@@ -3,10 +3,10 @@ module.exports = {
     '@vue/app'
   ],
   plugins: [
-    ["transform-imports", {
-      "vuetify": {
-        "transform": "vuetify/es5/components/${member}",
-        "preventFullImport": true
+    ['transform-imports', {
+      vuetify: {
+        transform: 'vuetify/es5/components/${member}',
+        preventFullImport: true
       }
     }]
   ]
